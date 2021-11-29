@@ -15,6 +15,7 @@ interface IERC20Token {
 }
 
 contract FloralNft{
+    
     struct Flower{
         address payable owner;
         string name;
@@ -23,6 +24,20 @@ contract FloralNft{
         uint price;
         bool forSale;
     }
+    
+    modifier onlyOwner(uint _index) {
+        require(msg.sender == flowers[_index].owner, "Not owner");
+        // execute the rest of the code.
+        _;
+    }
+    
+    // address passed in is not the zero address.
+    modifier validAddress(address _address) {
+        require(_address != address(0), "Not valid address");
+        // execute the rest of the code.
+        _;
+    }
+    
     address internal ownerAddress = 0xb7BF999D966F287Cd6A1541045999aD5f538D3c6;
     address internal cUsdTokenAddress = 0x874069Fa1Eb16D44d622F2e0Ca25eeA172369bC1;
     mapping (uint => Flower) internal flowers;
@@ -65,7 +80,7 @@ contract FloralNft{
         );
     }
     
-    function buyFlower(uint _index)public payable{
+    function buyFlower(uint _index) public payable{
         require(
             IERC20Token(cUsdTokenAddress).transferFrom(
                 msg.sender,
@@ -78,10 +93,14 @@ contract FloralNft{
         flowers[_index].owner = payable(msg.sender);
     }
     
-    function giftFlower(uint _index, address _address)public{
+    // ensures only owner can gift flower
+    // ensures flower is gifted to a valid address
+    function giftFlower(uint _index, address _address) public onlyOwner(_index) validAddress(_address) {
         flowers[_index].owner = payable(_address);
     }
-    function setForSale(uint _index)public{
+    
+    // ensures only owner can set and unset sale status
+    function setForSale(uint _index) public onlyOwner(_index) {
         flowers[_index].forSale = !flowers[_index].forSale;
     }
     
