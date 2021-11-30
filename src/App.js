@@ -1,3 +1,5 @@
+import toast, { Toaster } from 'react-hot-toast';
+
 import React, { useState, useEffect, useCallback } from "react";
 
 import Banner from "./components/Banner";
@@ -17,7 +19,7 @@ import MyFlowers from "./components/MyFlowers";
 
 const ERC20_DECIMALS = 18;
 
-const contractAddress = "0x9734cB4266ed3D586547b74dBDf1DB3e4f7F1a0f";
+const contractAddress = "0x1C2FC22D644Ffc6eb7e0258a4b0c17eAF446c5d6";
 const cUSDContractAddress = "0x874069Fa1Eb16D44d622F2e0Ca25eeA172369bC1";
 
 function App() {
@@ -34,7 +36,7 @@ function App() {
         await window.celo.enable();
         const web3 = new Web3(window.celo);
         let kit = newKitFromWeb3(web3);
-
+        
         const accounts = await kit.web3.eth.getAccounts();
         const user_address = accounts[0];
 
@@ -44,9 +46,11 @@ function App() {
         await setKit(kit);
       } catch (error) {
         console.log(error);
+        toast(error)
       }
     } else {
       console.log("Error Occurred");
+      toast("Error Occurred")
     }
   };
   const getBalance = useCallback(async () => {
@@ -59,6 +63,7 @@ function App() {
       setcUSDBalance(USDBalance);
     } catch (error) {
       console.log(error);
+      toast(error);
     }
   }, [address, kit]);
 
@@ -103,6 +108,7 @@ function App() {
       getBalance();
     } catch (error) {
       console.log(error);
+      toast(error)
     }
   };
 
@@ -114,6 +120,7 @@ function App() {
       getFlowers();
     } catch (error) {
       console.log(error);
+      toast(error)
     }
   };
 
@@ -123,6 +130,7 @@ function App() {
       getFlowers();
     } catch (error) {
       console.log(error);
+      toast(error);
     }
   };
 
@@ -181,6 +189,7 @@ function App() {
         <Route path="/gift/:id" element={<Gift giftFlower={giftFlower} />} />
       </Routes>
       <Header cUSDBalance={cUSDBalance} />
+      <Toaster/>
     </BrowserRouter>
   );
 }

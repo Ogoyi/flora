@@ -8,6 +8,7 @@ const Gift = (props) => {
   const giftHandler = (e) => {
     e.preventDefault();
     props.giftFlower(address, params.id);
+    setAddress("");
   };
 
   return (
