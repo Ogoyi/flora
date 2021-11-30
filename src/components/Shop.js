@@ -14,6 +14,11 @@ const Shop = (props) => {
   const submitHandler = (e) => {
     e.preventDefault();
     props.createFlower(name, description, image, price, forSale);
+    setName("");
+    setDescription("");
+    setImage("");
+    setPrice("");
+    setForSale();
   };
 
   const boolConverter = (string) => {
